@@ -1,4 +1,4 @@
-const numeral = require('numeraljs');
+const numeral = require('numeral');
 
 const getScreenWidth = () => process.stdout.columns;
 const getScreenHeight = () => process.stdout.rows;
