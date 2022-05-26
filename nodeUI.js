@@ -65,7 +65,7 @@ const buildStyleValues = (style) => {
         if (space < 1) {
           space = Math.ceil(getScreenHeight() * space);
         }
-        colorString += buildEmptySpace(space, '\n');
+        colorString += buildEmptySpace(space + 1, "\n");
       }
     } else if (item === 'nl') {
       colorString += "\n";
@@ -84,20 +84,20 @@ const buildStyleValues = (style) => {
 
 }
 
-const getWidth = (width, strLength) => {
+const getSpaceValue = (space, strLength) => {
 
-  const numberCheck = !isNaN(Number(width));
+  const numberCheck = !isNaN(Number(space));
 
   if (numberCheck) {
-    const widthValue = Number(width);
-    if (widthValue < 1) {
-      return Math.ceil(getScreenWidth() * widthValue);
+    const spaceValue = Number(space);
+    if (spaceValue < 1) {
+      return Math.ceil(getScreenWidth() * spaceValue);
     } else {
-      return widthValue;
+      return spaceValue;
     }
-  } else if (width === 'min') {
-    return strLength;
-  } else if (width === 'max') {
+  } else if (space === 'min') {
+    return strLength + 1;
+  } else if (space === 'max') {
     return getScreenWidth();
   }
 
@@ -105,26 +105,29 @@ const getWidth = (width, strLength) => {
 
 const buildString = (string, style) => {
 
-  const width = getWidth(style.width, string.length);
+  const stringLength = string.length + 1;
+  const width = getSpaceValue(style.width, stringLength);
 
-  const builtLeftSpace = buildEmptySpace(style.leftSpace, style.emptyChar);
-  const builtRightSpace = buildEmptySpace(style.rightSpace, style.emptyChar);
+  const leftSpace = style.leftSpace > 0 ? getSpaceValue(style.leftSpace, 0) + 1 : 0;
+  const rightSpace = style.rightSpace > 0 ? getSpaceValue(style.rightSpace, 0) + 1 : 0;
+  const builtLeftSpace = buildEmptySpace(leftSpace, style.emptyChar);
+  const builtRightSpace = buildEmptySpace(rightSpace, style.emptyChar);
+  
   let stringValue = `${builtLeftSpace}${string}${builtRightSpace}`;
   
-  if (stringValue.length > width) {
+  if (stringValue.length > width && style.width !== 'min' && style.width !== 'max') {
 
-    const remaining = width - string.length;
+    const remaining = width - stringLength;
     if (remaining > 0) {
-      const totalSpace = style.rightSpace + style.leftSpace;
-      const right = Math.floor(style.rightSpace / totalSpace * remaining);
-      const left = Math.ceil(style.leftSpace / totalSpace * remaining);
+      const totalSpace = rightSpace + leftSpace;
+      const right = Math.floor(rightSpace / totalSpace * remaining);
+      const left = Math.ceil(leftSpace / totalSpace * remaining);
       const builtLeftSpace = buildEmptySpace(left, style.emptyChar);
       const builtRightSpace = buildEmptySpace(right, style.emptyChar);
       stringValue = `${builtRightSpace}${string}${builtLeftSpace}`;
     } else {
-
-      const left = style.leftSpace > 0 ? style.emptyChar : "";
-      const right = style.rightSpace > 0 ? style.emptyChar : "";
+      const left = leftSpace > 0 ? style.emptyChar : "";
+      const right = rightSpace > 0 ? style.emptyChar : "";
       stringValue = `${left}${string.slice(0, width - 3 - left.length - right.length)}...${right}`;
     }
 
@@ -170,7 +173,6 @@ const print = (string) => {
 
       const clean = item.slice(1, -1);
       const string = buildString(clean, style);
-
       return prev + string;
     }
 
@@ -184,7 +186,7 @@ const progressBar = (value, max, options = {}) => {
 
   const { charWidth = 'max', charComplete = '*', charIncomplete = '_' } = options;
 
-  const width = getWidth(charWidth, max);
+  const width = getSpaceValue(charWidth, max);
   const units = width / max;
   const progress = Math.ceil(value * units);
   const remaining = Math.floor((max - value) * units);
