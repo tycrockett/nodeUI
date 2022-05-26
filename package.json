@@ -1,5 +1,5 @@
 {
-  "name": "nodeui",
+  "name": "simple-node-ui",
   "version": "1.0.0",
   "description": "Display text simply in the terminal for node",
   "main": "nodeUI.js",
