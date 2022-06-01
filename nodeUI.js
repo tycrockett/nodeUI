@@ -65,7 +65,7 @@ const buildStyleValues = (style) => {
         if (space < 1) {
           space = Math.ceil(getScreenHeight() * space);
         }
-        colorString += buildEmptySpace(space + 1, "\n");
+        colorString += buildEmptySpace(space, "\n");
       }
     } else if (item === 'nl') {
       colorString += "\n";
@@ -108,8 +108,8 @@ const buildString = (string, style) => {
   const stringLength = string.length + 1;
   const width = getSpaceValue(style.width, stringLength);
 
-  const leftSpace = style.leftSpace > 0 ? getSpaceValue(style.leftSpace, 0) + 1 : 0;
-  const rightSpace = style.rightSpace > 0 ? getSpaceValue(style.rightSpace, 0) + 1 : 0;
+  const leftSpace = getSpaceValue(style.leftSpace, 0);
+  const rightSpace = getSpaceValue(style.rightSpace, 0);
   const builtLeftSpace = buildEmptySpace(leftSpace, style.emptyChar);
   const builtRightSpace = buildEmptySpace(rightSpace, style.emptyChar);
   
