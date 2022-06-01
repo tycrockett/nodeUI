@@ -42,7 +42,7 @@ const styles = {
 
 }
 
-const buildEmptySpace = (length, char) => (Array.from(Array(Number(length ?? 0)).keys())).map(() => ('')).join(char);
+const buildEmptySpace = (length, char) => (Array.from(Array(Number(length + 1 ?? 0)).keys())).map(() => ('')).join(char);
 
 const buildStyleValues = (style) => {
 
@@ -182,14 +182,14 @@ const print = (string) => {
 
 }
 
-const progressBar = (value, max, options = {}) => {
+const progressBar = (unit, maxUnits, options = {}) => {
 
-  const { charWidth = 'max', charComplete = '*', charIncomplete = '_' } = options;
+  const { charWidth = 'max', charComplete = '*', charIncomplete = '=' } = options;
 
-  const width = getSpaceValue(charWidth, max);
-  const units = width / max;
-  const progress = Math.ceil(value * units);
-  const remaining = Math.floor((max - value) * units);
+  const width = getSpaceValue(charWidth, maxUnits);
+  const units = width / maxUnits;
+  const progress = Math.ceil(unit * units);
+  const remaining = Math.floor((maxUnits - unit) * units);
   const left = buildEmptySpace(progress, charComplete);
   const right = buildEmptySpace(remaining, charIncomplete);
   console.log(`${left}${right}`);
@@ -205,11 +205,11 @@ const percent = (value) => {
 };
 
 module.exports = {
-  styles,
   print,
-  progressBar,
-  buildEmptySpace,
+  styles,
   getScreenWidth,
   getScreenHeight,
+  buildEmptySpace,
+  progressBar,
   percent
 }

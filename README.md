@@ -1,4 +1,4 @@
-# Example
+# Print Example
 
 ```
 const { print } = require('simple-node-ui');
@@ -18,7 +18,7 @@ print(`
 `);
 ```
 
-## Output
+## Print Values
 ```
 width            
 
@@ -93,4 +93,30 @@ style
 
 
 
+```
+
+## styles
+```
+const { styles } = require('simple-node-ui);
+const { underscore } = styles;
+console.log(`${underscore}Hello`);
+```
+
+## getScreenWidth, getScreenHeight
+```
+const { print, getScreenWidth, getScreenHeight } = require('simple-node-ui');
+const width = getScreenWidth();
+print(`
+     <width:${width - 4} align:right>
+     "Width subtract four characters"
+`);
+```
+
+## buildEmptySpace
+```
+const { print, buildEmptySpace } = require('simple-node-ui');
+const stars = buildEmptySpace(5, '*');
+print(`
+     "${stars} 5 Stars"
+`);
 ```
